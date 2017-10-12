@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, TextInput,View, } from 'react-native';
-import * as Firebase from 'firebase';
+import Expo from 'expo';
+import * as firebase from 'firebase';
 
 import Color from '../constants/Colors';
 
@@ -12,10 +13,13 @@ const config = {
     //storageBucket: "dog-walker-neu.appspot.com",
     messagingSenderId: "52511519667"
 };
-Firebase.initializeApp(config);
+firebase.initializeApp(config);
 
 // Get a reference to the database service
-const database = Firebase.database();
+const database = firebase.database();
+
+let id = "";
+
 
 export default class HomeScreen extends React.Component {
 
@@ -23,16 +27,45 @@ export default class HomeScreen extends React.Component {
         email: "folz.ryan@yahoo.com",
         password: "password",
         number: 0,
+        signedIn: false,
     };
+
 
     static navigationOptions = {
         header: null,
     };
 
-    createUserFromEmail = () => {
+    componentWillMount() {
+        firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    this.setState = () => {
+                        return {
+                            signedIn: true,
+                        }
+                    };
+                } else {
+                    this.setState = () => {
+                        return {
+                            signedIn: false
+                        }
+                    };
+                }
+                console.log("onAuthStateChanged Called");
+                try {
+                    console.log("SignedIn", this.state.signedIn);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        );
+        this.isSignedIn();
+    };
+
+    createUserFromEmail = async () => {
         try {
-            Firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+            await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password);
             console.log("User Created!");
+            this.isSignedIn();
         } catch (error) {
             // Handle Errors here.
             console.log("Error Code", error.code);
@@ -41,30 +74,66 @@ export default class HomeScreen extends React.Component {
         }
     };
 
-    isLoggedIn = () => {
-        let user = Firebase.auth().currentUser;
+
+    // Sign a user in with Email and Password.
+    signInWithEmailAndPassword = async () => {
+        try {
+            await firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password);
+            console.log("User Signed In");
+            this.isSignedIn();
+        } catch (error) {
+            // Handle Errors here.
+            console.log("Error Code", error.code);
+            console.log("Error Message", error.message);
+        }
+    };
+
+    // Sees whether or not a User is signed in
+    isSignedIn = () => {
+        let user = firebase.auth().currentUser;
 
         console.log("User", user);
 
         if (user) {
             // User is signed in.
             console.log("User is signed in");
+            // Set state to the proper uid and email.
         } else {
             // No user is signed in.
             console.log("User is not signed in");
         }
     };
 
-    // Example on how to send data to the DataBase
-    sendDataToServerExample = () => {
-        Firebase.database().ref('users/' + this.state.username).set({
-            number: this.state.number
+    signOut = () => {
+        firebase.auth().signOut().then(() => {
+            // Sign-out successful.
+            console.log("Signed out successfully");
+            this.setState ({
+                signedIn: false,
+            });
+        }, function(error) {
+            // An error happened.
+            console.log(error);
         });
-        this.setState((previousState) => {
-            return {
-                number: previousState.number +1,
-            }
-        })
+    };
+
+    // Example on how to send data to the DataBase
+    sendDataToServerExample = async () => {
+        console.log("Sending Data to server under ID", firebase.auth().currentUser.uid);
+
+        console.log("Test", this.getButtonClickNumber() + 1);
+        await database.ref('users/' + firebase.auth().currentUser.uid).set({
+            number: this.getButtonClickNumber() + 1,
+        });
+    };
+
+    getButtonClickNumber = () => {
+        let userId = firebase.auth().currentUser.uid;
+        firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
+            let number = Number(snapshot.val().number);
+            console.log("number", number);
+            return number;
+        });
     };
 
     render() {
@@ -83,14 +152,40 @@ export default class HomeScreen extends React.Component {
                     value={this.state.password}>
                 </TextInput>
                 <Button
-                    color={'#000000'}
-                    title={'Sign In'}
+                    style={{width: 200}}
+                    color={'#FF6982'}
+                    title={'Create User'}
                     onPress={this.createUserFromEmail}>
                 </Button>
                 <Button
-                    color={'#000000'}
+                    style={{width: 200}}
+                    color={'#FF6982'}
                     title={'Is Signed In?'}
-                    onPress={this.isLoggedIn}>
+                    onPress={this.isSignedIn}>
+                </Button>
+                <Button
+                    style={{width: 200}}
+                    color={'#FF6982'}
+                    title={'Add 1'}
+                    onPress={this.sendDataToServerExample}>
+                </Button>
+                <Button
+                    style={{width: 200}}
+                    color={'#FF6982'}
+                    title={'Sign In With Email and Password'}
+                    onPress={this.signInWithEmailAndPassword}>
+                </Button>
+                <Button
+                    style={{width: 200}}
+                    color={'#FF6982'}
+                    title={'Sign out'}
+                    onPress={this.signOut}>
+                </Button>
+                <Button
+                    style={{width: 200}}
+                    color={'#FF6982'}
+                    title={'Get Click'}
+                    onPress={this.getButtonClickNumber}>
                 </Button>
             </View>
         );
