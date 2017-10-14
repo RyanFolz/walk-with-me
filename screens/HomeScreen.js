@@ -127,13 +127,14 @@ export default class HomeScreen extends React.Component {
         });
     };
 
-    getButtonClickNumber = () => {
+    getButtonClickNumber() {
         let userId = firebase.auth().currentUser.uid;
+        let number = 79;
         firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
-            let number = Number(snapshot.val().number);
+            number = Number(snapshot.val().number);
             console.log("number", number);
-            return number;
         });
+        return number;
     };
 
     render() {
