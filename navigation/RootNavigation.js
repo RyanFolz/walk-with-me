@@ -2,13 +2,13 @@ import { Notifications } from 'expo';
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 
-import MainTabNavigator from './MainTabNavigator';
+import MainNavigator from './MainNavigator';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
 const RootStackNavigator = StackNavigator(
   {
     Main: {
-      screen: MainTabNavigator,
+      screen: MainNavigator,
     },
   },
   {
