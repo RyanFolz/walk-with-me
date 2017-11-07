@@ -8,85 +8,82 @@ import { GiftedChat } from 'react-native-gifted-chat'
 import * as firebase from 'firebase';
 import Color from '../constants/Colors';
 
-export default class ChatScreen extends React.Component {
+export default class FindChatRoomScreen extends React.Component {
+
+    state = {
+        chatRooms: [],
+        sendMessage: '',
+    };
 
     static navigationOptions = {
         header: null,
     };
 
-    state = {
-        messages: [],
-        sendMessage: '',
-        chatRoomId: this.props.navigation.state.params.id,
-    };
-
     componentDidMount() {
-
-        firebase.database().ref('chatrooms/' + this.state.chatRoomId + '/messages/').on('value', (snapshot) => {
+        firebase.database().ref('chatrooms/').on('value', (snapshot) => {
             let returnArr = [];
-            let i = snapshot.numChildren() -1;
+            let idArr = [];
+            let i = 0;
+            try {
+                Object.keys(snapshot.val()).forEach(key => {
+                    console.log("Key: " + key);
+                    idArr.push(key);
+                });
+            } catch (error) {
+                console.log("ERROR: " + error);
+            }
             snapshot.forEach(function(item) {
-                let itemVal = {user: {}};
-                itemVal.text = item.val().message;
-                if (item.val().userId === firebase.auth().currentUser.uid) {
-                    itemVal.user._id = 1;
-                    console.log("Same user");
-                } else {
-                    itemVal.user._id = (Math.round(Math.random() * 100 + 2));
-                    console.log("Not same user");
-                }
-                itemVal.user.name = item.val().user.name;
+                console.log("Item: " + item);
+                let itemVal = {};
+                itemVal.title = item.val().title;
                 itemVal.createdAt = item.val().createdAt;
-                itemVal._id = i;
+                itemVal.id = idArr[i];
                 returnArr.push(itemVal);
-                i--;
+                i++;
             });
-            returnArr.reverse();
             console.log("snapshot", snapshot);
             console.log("returnArr", returnArr);
             this.setState({
-                messages: returnArr,
+                chatRooms: returnArr,
             })
         });
     };
 
-    addChat = () => {
-        let newPostRef = firebase.database().ref('chatrooms/' + this.state.chatRoomId + '/messages/').push();
+    renderChatItem = (item) => (
+        <View style={{padding: 8}}>
+            <Button
+                title={item.id}
+                onPress={() => this.goToSpecificChatPage(item)}/>
+        </View>
+    );
+
+    goToSpecificChatPage = (item) => {
+        const { navigate } = this.props.navigation;
+        console.log("ID Before Pass: " + item.id);
+        navigate('ChatScreen', { id: item.id});
+    };
+
+    addChatRoom = () => {
+        let newPostRef = firebase.database().ref('chatrooms/').push();
 
         newPostRef.set({
-            message: this.state.sendMessage,
-            userId: firebase.auth().currentUser.uid,
+            title: "Chat Room " + Math.random() * 100,
             createdAt: new Date().getTime(),
-            user: {
-                name: firebase.auth().currentUser.email,
-            }
-        });
-
-        this.setState(() => {
-            return {
-                sendMessage: '',
-            }
+            messages: null,
         });
     };
 
     render() {
         return (
             <View style={{flex: 1}}>
-                <GiftedChat
-                    messages={this.state.messages}
-                    onSend={this.addChat}
-                    text={this.state.sendMessage}
-                    onInputTextChanged={(text) => this.setState({sendMessage: text})}
-                    user={{
-                        _id: 1,
-                    }}
+                <FlatList
+                    data={this.state.chatRooms}
+                    renderItem={({item}) => this.renderChatItem(item)}
+                    onPressItem
                 />
-                {
-                    (Platform.OS === 'android') ?
-                        <KeyboardSpacer/>
-                        :
-                        null
-                }
+                <Button
+                    title={"Add Chat"}
+                    onPress={this.addChatRoom}/>
 
             </View>
         );

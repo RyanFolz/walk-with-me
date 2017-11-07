@@ -3,9 +3,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { StackNavigator } from 'react-navigation';
 
 import HomeScreen from '../screens/HomeScreen';
-import SignedInScreen from '../screens/SignedInScreen';
-import SettingsScreen from '../screens/SettingsScreen';
 import MainTabNavigator from '../navigation/MainTabNavigator'
+import ChatScreen from "../screens/ChatScreen";
 
 export default StackNavigator(
     {
@@ -15,9 +14,12 @@ export default StackNavigator(
         MainTabNavigator: {
             screen: MainTabNavigator,
         },
+        ChatScreen: {
+            screen: ChatScreen
+        }
         SettingsScreen: {
             screen: SettingsScreen,
         }
     },
-    { headerMode: 'none'}
+    { headerMode: 'none'},
 );
