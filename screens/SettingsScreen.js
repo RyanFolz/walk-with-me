@@ -109,19 +109,37 @@ export default class SettingsScreen extends React.Component {
        }
     }
 
+    signOut = () => {
+        firebase.auth().signOut().then(() => {
+            // Sign-out successful.
+            console.log("Signed out successfully");
+            this.setState ({
+                signedIn: false,
+            });
+        }, function(error) {
+            // An error happened.
+            console.log(error);
+        });
+    };
 
 
 
     getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
         let location = await Location.getCurrentPositionAsync({});
-        this.setState({ location });
-        console.log(this.state.location)
+        this.setState({ location: location });
+        console.log(location);
 
-        let latitude = location.latitude;
-        let longitude= location.longitude;
+        try {
+            let newPostRef = database.ref('user/' + firebase.auth().currentUser.uid + '/').push();
+            newPostRef.set({
+                latitude: this.state.location.coords.latitude,
+                longitude: this.state.location.coords.longitude
+            });
+        } catch (error) {
+            console.log(error);
+        }
 
-        this.setNewUserLocation();
     };
 
     distanceFromYou = (lat1, lat2, lon1, lon2) => {
@@ -133,12 +151,10 @@ export default class SettingsScreen extends React.Component {
         return d;
     }
 
-    setNewUserLocation = () => {
-        let newPostRef = firebase.database().ref('user/' + firebase.auth().user.uid + '/').push();
-        newPostRef.set({latitude: this.state.location.latitude});
-        newPostRef.set({longitude: this.state.location.longitude});
-    };
 
+checkUsers = () =>{
+
+}
 
 
     render() {
@@ -168,7 +184,15 @@ export default class SettingsScreen extends React.Component {
                              />
 
                   </View>
-
+                  <TouchableOpacity
+                      style={{borderRadius: 0, width: Dimensions.get('window').width, height: 50, margin: 8, marginTop: 14, justifyContent: 'center', alignItems: 'center', backgroundColor: '#4559F2'}}
+                      onPress={this.checkUsers}
+                      activeOpacity={.5}>
+                      <Text
+                          style={{color: '#FFFFFF', fontWeight: 'bold'}}>
+                          Find Users Near Me!
+                      </Text>
+                  </TouchableOpacity>
 
 
 

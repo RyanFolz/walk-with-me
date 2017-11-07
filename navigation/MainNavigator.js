@@ -15,5 +15,9 @@ export default StackNavigator(
         MainTabNavigator: {
             screen: MainTabNavigator,
         },
+        SettingsScreen: {
+            screen: SettingsScreen,
+        }
     },
+    { headerMode: 'none'}
 );
