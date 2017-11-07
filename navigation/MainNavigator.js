@@ -2,7 +2,7 @@ import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { StackNavigator } from 'react-navigation';
 
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '../screens/SignUpScreen';
 import SignedInScreen from '../screens/SignedInScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import MainTabNavigator from '../navigation/MainTabNavigator'
