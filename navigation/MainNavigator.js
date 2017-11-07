@@ -17,6 +17,9 @@ export default StackNavigator(
         ChatScreen: {
             screen: ChatScreen
         }
+        SettingsScreen: {
+            screen: SettingsScreen,
+        }
     },
-
+    { headerMode: 'none'},
 );
