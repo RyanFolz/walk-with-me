@@ -7,7 +7,7 @@ import Colors from '../constants/Colors';
 
 import Settings from '../screens/SignedInScreen';
 import HomeScreen from '../screens/SignedInScreen';
-import Chat from '../screens/ChatScreen';
+import FindChatRoomScreen from "../screens/FindChatRoomScreen";
 
 export default TabNavigator(
     {
@@ -17,8 +17,8 @@ export default TabNavigator(
         HomeScreen: {
             screen: HomeScreen,
         },
-        Chat: {
-            screen: Chat,
+        FindChatRoomScreen: {
+            screen: FindChatRoomScreen,
         },
     },
     {
@@ -37,7 +37,7 @@ export default TabNavigator(
                             ? `ios-link${focused ? '' : '-outline'}`
                             : 'md-link';
                         break;
-                    case 'Chat':
+                    case 'FindChatRoomScreen':
                         iconName = Platform.OS === 'ios'
                             ? `ios-options${focused ? '' : '-outline'}`
                             : 'md-options';
