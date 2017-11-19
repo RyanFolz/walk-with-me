@@ -63,7 +63,7 @@ export default class HomeScreen extends React.Component {
             await firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password);
             if (this.isSignedIn()) {
                 console.log("AUTHORIZED BITCH");
-                navigate('MainTabNavigator', { name: 'Jane' })
+                navigate('MainTabNavigator');
             } else {
                 console.log("UNAUTHORIZED BITCH");
                 this.setState({
@@ -89,6 +89,11 @@ export default class HomeScreen extends React.Component {
             console.log("Error Message", error.message);
             console.log("UNAUTHORIZED BITCH");
         }
+    };
+
+    gotoSettings = () => {
+        const { navigate } = this.props.navigation;
+        navigate('SettingsScreen');
     };
 
     // Sees whether or not a User is signed in
@@ -189,6 +194,15 @@ export default class HomeScreen extends React.Component {
                         <Text
                             style={{color: '#FF6982', fontWeight: 'bold'}}>
                             Create an Account
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{borderRadius: 18, width: 200, height: 36, margin: 8, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFFFFF'}}
+                        onPress={this.gotoSettings}
+                        activeOpacity={.6}>
+                        <Text
+                            style={{color: '#FF6982', fontWeight: 'bold'}}>
+                            Settings
                         </Text>
                     </TouchableOpacity>
                     <View style={{height: 40}}/>
