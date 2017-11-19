@@ -39,6 +39,9 @@ export default class HomeScreen extends React.Component {
     };
 
     createUserFromEmail = async () => {
+        const  { navigate } = this.props.navigation;
+        navigate('SignUpScreen')
+        /*
         try {
             await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password);
             console.log("User Created!");
@@ -49,6 +52,7 @@ export default class HomeScreen extends React.Component {
             console.log("Error Message", error.message);
             // ...
         }
+        */
     };
 
 
@@ -121,6 +125,7 @@ export default class HomeScreen extends React.Component {
             console.log(error);
         });
     };
+
 
     // Example on how to send data to the DataBase
     sendDataToServerExample = async () => {

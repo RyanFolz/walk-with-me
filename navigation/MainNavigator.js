@@ -3,7 +3,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { StackNavigator } from 'react-navigation';
 
 import HomeScreen from '../screens/HomeScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 import MainTabNavigator from '../navigation/MainTabNavigator'
+import SignUpScreen from "../screens/SignUpScreen";
 import ChatScreen from "../screens/ChatScreen";
 
 export default StackNavigator(
@@ -13,6 +15,10 @@ export default StackNavigator(
         },
         MainTabNavigator: {
             screen: MainTabNavigator,
+        },
+        AddSignUpPage
+        SignUpScreen: {
+            screen: SignUpScreen,
         },
         ChatScreen: {
             screen: ChatScreen
