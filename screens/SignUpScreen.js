@@ -14,7 +14,6 @@ const config = {
     storageBucket: "dog-walker-neu.appspot.com",
     messagingSenderId: "53011519667"
 };
-firebase.initializeApp(config);
 console.disableYellowBox = true;
 
 // Get a reference to the database service
@@ -27,20 +26,19 @@ export default class SignUpScreen extends React.Component {
 
         this.state = {
             email: "Email",
-            useremail: "hunt.ni@husky.neu.edu",
+            useremail: "folz.ryan@yahoo.com",
             password: "Password",
-            userpw: "",
-            confirmpassword: "",
-            usercp: "",
+            userpw: "password",
+            confirmpassword: "password",
             firstname: "First Name",
-            userfn: "",
+            userfn: "Ryan",
             lastname: "Last Name",
-            userln: "",
+            userln: "Folz",
             number: 0,
             signedIn: false,
             signInErrorMessage: "",
             phonenumber: "Phone Number",
-            userphone: "",
+            userphone: "5025521232",
         };
     }
 
@@ -48,11 +46,39 @@ export default class SignUpScreen extends React.Component {
         header: null,
     };
 
+    createUserFromEmail = async () => {
+        const  { navigate } = this.props.navigation;
 
-    /* signInWithFacebook = (input1) => {
-         return input1;
-     };
- */
+
+        try {
+            await firebase.auth().createUserWithEmailAndPassword(this.state.useremail, this.state.userpw);
+            console.log("User Created!");
+
+            let user = await firebase.auth().currentUser;
+            if (user) {
+                let newPostRef = firebase.database().ref('users/').push();
+
+                newPostRef.set({
+                    firstName: this.state.userfn,
+                    lastName: this.state.userln,
+                    phoneNumber: this.state.userphone,
+                    userId: firebase.auth().currentUser.uid,
+                    createdAt: new Date().getTime(),
+                });
+            } else {
+                // No user is signed in.
+                console.log("ERROR: Create User");
+            }
+
+            navigate('MainTabNavigator');
+        } catch (error) {
+            // Handle Errors here.
+            console.log("Error Code", error.code);
+            console.log("Error Message", error.message);
+            // ...
+        }
+    };
+
 
     render() {
         return (
@@ -66,64 +92,66 @@ export default class SignUpScreen extends React.Component {
                     alignItems: 'center',
                 }}>
                     <Text
-                        style={{color: '#FFFFFF', fontWeight: 'bold', marginBottom: 40, fontSize: 40,}}>
+                        style={{color: '#FF6982', fontWeight: 'bold', marginBottom: 40, fontSize: 40,}}>
                         Create Account
                     </Text>
                     <Text
-                        style={{color: "#C0C0C0", fontSize: 18, fontWeight: 'bold'}}>
+                        style={{color: "#FF6982", fontSize: 18, fontWeight: 'bold'}}>
                         {this.state.firstname}
                     </Text>
                     <TextInput
-                        style={{borderRadius: 15, backgroundColor: 'FFFF00', margin: 6, width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingLeft: 6}}
+                        style={{borderRadius: 15, backgroundColor: '#FFFFFF', margin: 6, textAlign: 'center', width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingHorizontal: 10}}
                         onChangeText={(text) => this.setState({userfn: text})}
                         underlineColorAndroid={Color.transparent}
                         value={this.state.userfn}
                         placeholder={"First Name"}>
                     </TextInput>
                     <Text
-                        style={{color: "#C0C0C0", fontSize: 18, fontWeight: 'bold'}}>
+                        style={{color: "#FF6982", fontSize: 18, fontWeight: 'bold'}}>
                         {this.state.lastname}
                     </Text>
                     <TextInput
-                        style={{borderRadius: 15, backgroundColor: 'FF00FF', margin: 6, width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingLeft: 6}}
+                        style={{borderRadius: 15, backgroundColor: '#FFFFFF', margin: 6, textAlign: 'center', width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingHorizontal: 10}}
                         onChangeText={(text) => this.setState({userln: text})}
                         underlineColorAndroid={Color.transparent}
                         value={this.state.userln}
                         placeholder={"Last Name"}>
                     </TextInput>
                     <Text
-                        style={{color: "#C0C0C0", fontSize: 18, fontWeight: 'bold'}}>
+                        style={{color: "#FF6982", fontSize: 18, fontWeight: 'bold'}}>
                         {this.state.email}
                     </Text>
                     <TextInput
-                        style={{borderRadius: 15, backgroundColor: '#FFFFFF', margin: 6, width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingLeft: 10}}
+                        style={{borderRadius: 15, backgroundColor: '#FFFFFF', margin: 6, textAlign: 'center', width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingHorizontal: 10}}
                         onChangeText={(text) => this.setState({useremail: text})}
                         underlineColorAndroid={Color.transparent}
-                        value={this.state.useremail}>
+                        value={this.state.useremail}
+                        placeholder={"Email"}>
                     </TextInput>
                     <Text
-                        style={{color: "#C0C0C0", fontSize: 18, fontWeight: 'bold'}}>
+                        style={{color: "#FF6982", fontSize: 18, fontWeight: 'bold'}}>
                         {this.state.password}
                     </Text>
                     <TextInput
-                        style={{borderRadius: 15, backgroundColor: '#FFFFFF', margin: 6, width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingLeft: 6}}
+                        style={{borderRadius: 15, backgroundColor: '#FFFFFF', margin: 6, textAlign: 'center', width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingHorizontal: 10}}
                         onChangeText={(text) => this.setState({userpw: text})}
                         underlineColorAndroid={Color.transparent}
-                        value={this.state.userpw}>
+                        value={this.state.userpw}
+                        placeholder={"Password"}>
                     </TextInput>
                     <TextInput
-                        style={{borderRadius: 15, backgroundColor: 'FF00FF', margin: 6, width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingLeft: 6}}
+                        style={{borderRadius: 15, backgroundColor: '#FFFFFF', margin: 6, textAlign: 'center', width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingHorizontal: 10}}
                         onChangeText={(text) => this.setState({confirmpassword: text})}
                         underlineColorAndroid={Color.transparent}
                         value={this.state.confirmpassword}
                         placeholder={"Confirm Password"}>
                     </TextInput>
                     <Text
-                        style={{color: "#C0C0C0", fontSize: 18, fontWeight: 'bold'}}>
+                        style={{color: "#FF6982", fontSize: 18, fontWeight: 'bold'}}>
                         {this.state.phonenumber}
                     </Text>
                     <TextInput
-                        style={{borderRadius: 15, backgroundColor: '008000', margin: 6, width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingLeft: 6}}
+                        style={{borderRadius: 15, backgroundColor: '#FFFFFF', margin: 6, textAlign: 'center', width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingHorizontal: 10}}
                         onChangeText={(text) => this.setState({userphone: text})}
                         underlineColorAndroid={Color.transparent}
                         value={this.state.userphone}
@@ -134,21 +162,12 @@ export default class SignUpScreen extends React.Component {
                         {this.state.signInErrorMessage}
                     </Text>
                     <TouchableOpacity
-                        style={{borderRadius: 15, width: 200, height: 30, margin: 6, marginTop: 14, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FF6982'}}
-                        onPress={this.signInWithEmailAndPassword}
-                        activeOpacity={.6}>
-                        <Text
-                            style={{color: '#FFFFFF', fontWeight: 'bold'}}>
-                            Sign In
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
                         style={{borderRadius: 15, width: 200, height: 30, margin: 6, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFFFFF'}}
                         onPress={this.createUserFromEmail}
                         activeOpacity={.6}>
                         <Text
                             style={{color: '#FF6982', fontWeight: 'bold'}}>
-                            Create an Account
+                            Create Account
                         </Text>
                     </TouchableOpacity>
                     <View style={{height: 40}}/>
