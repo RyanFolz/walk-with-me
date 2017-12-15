@@ -38,18 +38,23 @@ export default class SettingsScreen extends React.Component {
     }
 
     static navigationOptions = {
+        headerLeft:
+            <View>
+                <Text>Test</Text>
+            </View>
+        /*
+                title: (
+                    <View style={{
+                        width: Dimensions.get("window").width - 80,
+                        height:50,
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}>
+                        <Text style={{color: '#000000', fontWeight: 'bold', fontSize: 20,}}>
+                            Settings
+                        </Text>
 
-        title: (<View style={{
-            width: Dimensions.get("window").width - 80,
-            height:50,
-            justifyContent: "center",
-            alignItems: "center",
-        }}>
-            <Text style={{color: '#000000', fontWeight: 'bold', fontSize: 20,}}>
-            Settings
-            </Text>
-
-        </View>),
+                    </View>),*/
     };
 
 
@@ -83,31 +88,31 @@ export default class SettingsScreen extends React.Component {
         Alert.alert(
             'Wait!',
             'Are you sure you want to delete your account?',
-                [
+            [
                 {text: 'Yes', onPress: this.deleteAccount},
                 {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
-                ]
+            ]
         )
-    }
+    };
 
     //deletes the account
     deleteAccount = async () => {
-       try {
-           console.log('Yes Pressed');
-           let user = firebase.auth().currentUser;
-           user.delete();
-           Alert.alert(
-               'Success',
-               'Your account has been deleted. Sorry to see you go :(',
-           )
-       }catch(error){
-           console.log('Error');
-           Alert.alert(
-               'Error',
-               'Your account could not be deleted.',
-           )
-       }
-    }
+        try {
+            console.log('Yes Pressed');
+            let user = firebase.auth().currentUser;
+            user.delete();
+            Alert.alert(
+                'Success',
+                'Your account has been deleted. Sorry to see you go :(',
+            )
+        }catch(error){
+            console.log('Error');
+            Alert.alert(
+                'Error',
+                'Your account could not be deleted.',
+            )
+        }
+    };
 
     signOut = () => {
         firebase.auth().signOut().then(() => {
@@ -149,107 +154,106 @@ export default class SettingsScreen extends React.Component {
         let c = 2 * Math.atan2( Math.sqrt(a), Math.sqrt(1-a));
         let d = 3961 * c ;
         return d;
-    }
+    };
 
 
-checkUsers = () =>{
+    checkUsers = () =>{
 
-}
+    };
 
 
     render() {
         return (
             <KeyboardAwareScrollView
                 enableOnAndroid={true}>
-              <View style={{
-                  flex: 1,
-                  height: Dimensions.get("window").height,
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-              }}>
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
 
 
 
-                  <View style={{flex: 0, alignItems: 'stretch', justifyContent: 'center'}}>
+                    <View style={{flex: 0, alignItems: 'stretch', justifyContent: 'center'}}>
 
-                      <Text>Distance Range: {this.state.distanceRange} Miles</Text>
-                      <Slider
-                          value={this.state.distanceRange}
-                          minimumValue = {0}
-                          maximumValue = {100}
-                          step = {1}
+                        <Text>Distance Range: {this.state.distanceRange} Miles</Text>
+                        <Slider
+                            value={this.state.distanceRange}
+                            minimumValue = {0}
+                            maximumValue = {100}
+                            step = {1}
 
-                          onValueChange={(value) => this.setState({distanceRange: value})}
-                             />
+                            onValueChange={(value) => this.setState({distanceRange: value})}
+                        />
 
-                  </View>
-                  <TouchableOpacity
-                      style={{borderRadius: 0, width: Dimensions.get('window').width, height: 50, margin: 8, marginTop: 14, justifyContent: 'center', alignItems: 'center', backgroundColor: '#4559F2'}}
-                      onPress={this.checkUsers}
-                      activeOpacity={.5}>
-                      <Text
-                          style={{color: '#FFFFFF', fontWeight: 'bold'}}>
-                          Find Users Near Me!
-                      </Text>
-                  </TouchableOpacity>
-
-
+                    </View>
+                    <TouchableOpacity
+                        style={{borderRadius: 0, width: Dimensions.get('window').width, height: 50, margin: 8, marginTop: 14, justifyContent: 'center', alignItems: 'center', backgroundColor: '#4559F2'}}
+                        onPress={this.checkUsers}
+                        activeOpacity={.5}>
+                        <Text
+                            style={{color: '#FFFFFF', fontWeight: 'bold'}}>
+                            Find Users Near Me!
+                        </Text>
+                    </TouchableOpacity>
 
 
-                <TouchableOpacity
-                    style={{borderRadius: 0, width: Dimensions.get('window').width, height: 50, margin: 8, marginTop: 104, justifyContent: 'center', alignItems: 'center', backgroundColor: '#4559F2'}}
-                    onPress={() => Linking.openURL('https://itunes.apple.com/us/genre/ios/id36?mt=8')}
-                    activeOpacity={.5}>
+
+
+                    <TouchableOpacity
+                        style={{borderRadius: 0, width: Dimensions.get('window').width, height: 50, margin: 8, marginTop: 104, justifyContent: 'center', alignItems: 'center', backgroundColor: '#4559F2'}}
+                        onPress={() => Linking.openURL('https://itunes.apple.com/us/genre/ios/id36?mt=8')}
+                        activeOpacity={.5}>
+                        <Text
+                            style={{color: '#FFFFFF', fontWeight: 'bold'}}>
+                            Rate Us
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{borderRadius: 0, width: Dimensions.get('window').width, height: 50, margin: 8, marginTop: 14, justifyContent: 'center', alignItems: 'center', backgroundColor: '#4559F2'}}
+                        onPress={() => Linking.openURL('https://www.facebook.com/')}
+                        activeOpacity={.5}>
+                        <Text
+                            style={{color: '#FFFFFF', fontWeight: 'bold'}}>
+                            Share Tinder?
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{borderRadius: 0, width: Dimensions.get('window').width, height: 50, margin: 8, marginTop: 100, justifyContent: 'center', alignItems: 'center', backgroundColor: '#4559F2'}}
+                        onPress={this.signOut}
+                        activeOpacity={.5}>
+                        <Text
+                            style={{color: '#FFFFFF', fontWeight: 'bold'}}>
+                            Log Out
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{borderRadius: 0, width: Dimensions.get('window').width, height: 50, margin: 8, marginTop: 14, justifyContent: 'center', alignItems: 'center', backgroundColor: '#4559F2'}}
+                        onPress={this.showAlert}
+                        activeOpacity={.5}>
+                        <Text
+                            style={{color: '#FFFFFF', fontWeight: 'bold'}}>
+                            Delete Account
+                        </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={{borderRadius: 0, width: Dimensions.get('window').width, height: 50, margin: 8, marginTop: 100, justifyContent: 'center', alignItems: 'center', backgroundColor: '#4559F2'}}
+                        onPress={this.getLocationAsync}
+                        activeOpacity={.5}>
+                        <Text
+                            style={{color: '#FFFFFF', fontWeight: 'bold'}}>
+                            Enable Location Services/ Update Location
+                        </Text>
+                    </TouchableOpacity>
                     <Text
-                        style={{color: '#FFFFFF', fontWeight: 'bold'}}>
-                        Rate Us
+                        style={{color: '#ff7e79', fontSize: 14, height: 18}}>
+                        {this.state.signInErrorMessage}
                     </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                      style={{borderRadius: 0, width: Dimensions.get('window').width, height: 50, margin: 8, marginTop: 14, justifyContent: 'center', alignItems: 'center', backgroundColor: '#4559F2'}}
-                      onPress={() => Linking.openURL('https://www.facebook.com/')}
-                      activeOpacity={.5}>
-                      <Text
-                          style={{color: '#FFFFFF', fontWeight: 'bold'}}>
-                          Share Tinder?
-                      </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                      style={{borderRadius: 0, width: Dimensions.get('window').width, height: 50, margin: 8, marginTop: 100, justifyContent: 'center', alignItems: 'center', backgroundColor: '#4559F2'}}
-                      onPress={this.signOut}
-                      activeOpacity={.5}>
-                      <Text
-                          style={{color: '#FFFFFF', fontWeight: 'bold'}}>
-                          Log Out
-                      </Text>
-                </TouchableOpacity>
-                  <TouchableOpacity
-                      style={{borderRadius: 0, width: Dimensions.get('window').width, height: 50, margin: 8, marginTop: 14, justifyContent: 'center', alignItems: 'center', backgroundColor: '#4559F2'}}
-                      onPress={this.showAlert}
-                      activeOpacity={.5}>
-                      <Text
-                          style={{color: '#FFFFFF', fontWeight: 'bold'}}>
-                          Delete Account
-                      </Text>
-                  </TouchableOpacity>
 
-                  <TouchableOpacity
-                      style={{borderRadius: 0, width: Dimensions.get('window').width, height: 50, margin: 8, marginTop: 100, justifyContent: 'center', alignItems: 'center', backgroundColor: '#4559F2'}}
-                      onPress={this.getLocationAsync}
-                      activeOpacity={.5}>
-                      <Text
-                          style={{color: '#FFFFFF', fontWeight: 'bold'}}>
-                          Enable Location Services/ Update Location
-                      </Text>
-                  </TouchableOpacity>
-                <Text
-                    style={{color: '#ff7e79', fontSize: 14, height: 18}}>
-                    {this.state.signInErrorMessage}
-                </Text>
-
-                <View style={{height: 40}}/>
-              </View>
+                    <View style={{height: 40}}/>
+                </View>
             </KeyboardAwareScrollView>
         );
     }

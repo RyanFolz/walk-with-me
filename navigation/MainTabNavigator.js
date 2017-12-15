@@ -8,6 +8,7 @@ import Colors from '../constants/Colors';
 import Settings from '../screens/SignedInScreen';
 import HomeScreen from '../screens/SignedInScreen';
 import FindChatRoomScreen from "../screens/FindChatRoomScreen";
+import FindOtherUsersScreen from "../screens/FindOtherUsersScreen";
 
 export default TabNavigator(
     {
@@ -15,7 +16,7 @@ export default TabNavigator(
             screen: Settings,
         },
         HomeScreen: {
-            screen: HomeScreen,
+            screen: FindOtherUsersScreen,
         },
         FindChatRoomScreen: {
             screen: FindChatRoomScreen,

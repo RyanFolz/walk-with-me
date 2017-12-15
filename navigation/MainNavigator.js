@@ -16,13 +16,12 @@ export default StackNavigator(
         MainTabNavigator: {
             screen: MainTabNavigator,
         },
-        AddSignUpPage
         SignUpScreen: {
             screen: SignUpScreen,
         },
         ChatScreen: {
             screen: ChatScreen
-        }
+        },
         SettingsScreen: {
             screen: SettingsScreen,
         }

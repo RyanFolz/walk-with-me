@@ -26,16 +26,13 @@ export default class FindChatRoomScreen extends React.Component {
             let i = 0;
             try {
                 Object.keys(snapshot.val()).forEach(key => {
-                    console.log("Key: " + key);
                     idArr.push(key);
                 });
             } catch (error) {
                 console.log("ERROR: " + error);
             }
             snapshot.forEach(function(item) {
-                console.log("Item: " + item);
                 let itemVal = {};
-                itemVal.title = item.val().title;
                 itemVal.createdAt = item.val().createdAt;
                 itemVal.id = idArr[i];
                 returnArr.push(itemVal);

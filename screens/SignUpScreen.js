@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Dimensions, Text, TextInput, TouchableOpacity, View, } from 'react-native';
-import Expo from 'expo';
+import { Constants, Location, Permissions } from 'expo';
 import * as firebase from 'firebase';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
@@ -46,9 +46,21 @@ export default class SignUpScreen extends React.Component {
         header: null,
     };
 
+    distanceFromYou = (lat1, lat2, lon1, lon2) => {
+        let dlon = lon2 - lon1;
+        let  dlat = lat2 - lat1;
+        let a = (Math.sin(dlat/2))^2 + Math.cos(lat1) * Math.cos(lat2) * (Math.sin(dlon/2))^2;
+        let c = 2 * Math.atan2( Math.sqrt(a), Math.sqrt(1-a));
+        let d = 3961 * c ;
+        return d;
+    };
+
     createUserFromEmail = async () => {
         const  { navigate } = this.props.navigation;
-
+        let { status } = await Permissions.askAsync(Permissions.LOCATION);
+        let location = await Location.getCurrentPositionAsync({});
+        this.setState({ location: location });
+        console.log(location);
 
         try {
             await firebase.auth().createUserWithEmailAndPassword(this.state.useremail, this.state.userpw);
@@ -64,6 +76,8 @@ export default class SignUpScreen extends React.Component {
                     phoneNumber: this.state.userphone,
                     userId: firebase.auth().currentUser.uid,
                     createdAt: new Date().getTime(),
+                    latitude: this.state.location.coords.latitude,
+                    longitude: this.state.location.coords.longitude
                 });
             } else {
                 // No user is signed in.
@@ -103,6 +117,7 @@ export default class SignUpScreen extends React.Component {
                         style={{borderRadius: 15, backgroundColor: '#FFFFFF', margin: 6, textAlign: 'center', width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingHorizontal: 10}}
                         onChangeText={(text) => this.setState({userfn: text})}
                         underlineColorAndroid={Color.transparent}
+                        autoCapitalize={"words"}
                         value={this.state.userfn}
                         placeholder={"First Name"}>
                     </TextInput>
@@ -114,6 +129,7 @@ export default class SignUpScreen extends React.Component {
                         style={{borderRadius: 15, backgroundColor: '#FFFFFF', margin: 6, textAlign: 'center', width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingHorizontal: 10}}
                         onChangeText={(text) => this.setState({userln: text})}
                         underlineColorAndroid={Color.transparent}
+                        autoCapitalize={"words"}
                         value={this.state.userln}
                         placeholder={"Last Name"}>
                     </TextInput>
@@ -125,6 +141,7 @@ export default class SignUpScreen extends React.Component {
                         style={{borderRadius: 15, backgroundColor: '#FFFFFF', margin: 6, textAlign: 'center', width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingHorizontal: 10}}
                         onChangeText={(text) => this.setState({useremail: text})}
                         underlineColorAndroid={Color.transparent}
+                        autoCapitalize={"words"}
                         value={this.state.useremail}
                         placeholder={"Email"}>
                     </TextInput>
@@ -136,6 +153,7 @@ export default class SignUpScreen extends React.Component {
                         style={{borderRadius: 15, backgroundColor: '#FFFFFF', margin: 6, textAlign: 'center', width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingHorizontal: 10}}
                         onChangeText={(text) => this.setState({userpw: text})}
                         underlineColorAndroid={Color.transparent}
+                        autoCapitalize={"words"}
                         value={this.state.userpw}
                         placeholder={"Password"}>
                     </TextInput>
@@ -143,6 +161,7 @@ export default class SignUpScreen extends React.Component {
                         style={{borderRadius: 15, backgroundColor: '#FFFFFF', margin: 6, textAlign: 'center', width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingHorizontal: 10}}
                         onChangeText={(text) => this.setState({confirmpassword: text})}
                         underlineColorAndroid={Color.transparent}
+                        autoCapitalize={"words"}
                         value={this.state.confirmpassword}
                         placeholder={"Confirm Password"}>
                     </TextInput>
@@ -154,6 +173,7 @@ export default class SignUpScreen extends React.Component {
                         style={{borderRadius: 15, backgroundColor: '#FFFFFF', margin: 6, textAlign: 'center', width: 240, height: 30, borderWidth: 1, borderColor: Color.borderGrey, padding: 2, paddingHorizontal: 10}}
                         onChangeText={(text) => this.setState({userphone: text})}
                         underlineColorAndroid={Color.transparent}
+                        keyboardType={"numeric"}
                         value={this.state.userphone}
                         placeholder={"Phone Number"}>
                     </TextInput>

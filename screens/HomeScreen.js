@@ -91,7 +91,7 @@ export default class HomeScreen extends React.Component {
         }
     };
 
-    gotoSettings = () => {
+    goToSettings = () => {
         const { navigate } = this.props.navigation;
         navigate('SettingsScreen');
     };
@@ -198,7 +198,7 @@ export default class HomeScreen extends React.Component {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={{borderRadius: 18, width: 200, height: 36, margin: 8, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFFFFF'}}
-                        onPress={this.gotoSettings}
+                        onPress={this.goToSettings}
                         activeOpacity={.6}>
                         <Text
                             style={{color: '#FF6982', fontWeight: 'bold'}}>

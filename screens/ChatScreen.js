@@ -17,14 +17,18 @@ export default class ChatScreen extends React.Component {
     state = {
         messages: [],
         sendMessage: '',
-        chatRoomId: this.props.navigation.state.params.id,
+        currentDate: this.props.navigation.state.params.currentDate,
+        idOne: this.props.navigation.state.params.idOne,
+        idTwo: this.props.navigation.state.params.idTwo,
     };
 
     componentDidMount() {
+        console.log(this.props.navigation.state.params);
+        let chatRoomId = this.props.navigation.state.params.chatRoomId;
 
-        firebase.database().ref('chatrooms/' + this.state.chatRoomId + '/messages/').on('value', (snapshot) => {
+        firebase.database().ref('chatrooms/' + chatRoomId + '/messages/').on('value', (snapshot) => {
             let returnArr = [];
-            let i = snapshot.numChildren() -1;
+            let i = 0;
             snapshot.forEach(function(item) {
                 let itemVal = {user: {}};
                 itemVal.text = item.val().message;
@@ -39,11 +43,11 @@ export default class ChatScreen extends React.Component {
                 itemVal.createdAt = item.val().createdAt;
                 itemVal._id = i;
                 returnArr.push(itemVal);
-                i--;
+                i++;
             });
             returnArr.reverse();
-            console.log("snapshot", snapshot);
-            console.log("returnArr", returnArr);
+            console.log("snapshot Messages", snapshot);
+            console.log("returnArr Messages", returnArr);
             this.setState({
                 messages: returnArr,
             })
@@ -51,7 +55,9 @@ export default class ChatScreen extends React.Component {
     };
 
     addChat = () => {
-        let newPostRef = firebase.database().ref('chatrooms/' + this.state.chatRoomId + '/messages/').push();
+        let chatRoomId = this.props.navigation.state.params.chatRoomId;
+        console.log("chatroomId: " + chatRoomId);
+        let newPostRef = firebase.database().ref('chatrooms/' + chatRoomId + '/messages/').push();
 
         newPostRef.set({
             message: this.state.sendMessage,
